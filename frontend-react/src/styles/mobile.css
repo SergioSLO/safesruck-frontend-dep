@@ -1,0 +1,144 @@
+/* =======================================================
+   mobile.css - Layout móvil limpio
+   ======================================================= */
+
+   @media (max-width: 768px) {
+
+    /* Mapa ocupa toda la pantalla */
+    .map-shell {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+  
+    /* Panel de búsqueda oculto por defecto en móvil */
+    .search-panel {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: auto;
+      width: 100%;
+      border-radius: 24px 24px 0 0;
+      padding: 16px 20px 32px;
+      padding-bottom: max(32px, env(safe-area-inset-bottom));
+      max-height: 85vh;
+      overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+      z-index: 510;
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.18);
+    }
+  
+    .search-panel.mobile-open {
+      transform: translateY(0);
+    }
+  
+    /* Escondo elementos innecesarios en móvil */
+    .brand-row,
+    .hero-copy,
+    .eyebrow,
+    .status-pill {
+      display: none;
+    }
+  
+    .route-sheet {
+        position: fixed; /* ya está */
+      }
+      
+      .route-sheet .sheet-handle {
+        cursor: pointer;
+      }
+
+    /* Barra fija arriba - siempre visible */
+    .mobile-bar {
+      display: flex !important;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 500;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      padding-top: max(10px, env(safe-area-inset-top));
+      background: white;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+  
+    .mobile-bar-logo {
+      font-size: 0.78rem;
+      font-weight: 900;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+  
+    .mobile-bar-search {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      background: #f1f5f1;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #66756f;
+      text-align: left;
+    }
+  
+    /* Panel de resultado */
+    .route-sheet {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      border-radius: 24px 24px 0 0;
+      padding: 16px 20px;
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
+      max-height: 60vh;
+      overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+      z-index: 500;
+      border: none;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+  
+    .route-sheet.visible {
+      transform: translateY(0);
+    }
+  
+    .route-steps {
+      max-height: 200px;
+    }
+  
+    .map-legend {
+      left: 12px;
+      bottom: 12px;
+    }
+  
+    /* Overlay oscuro detrás del search panel */
+    .mobile-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 505;
+    }
+  
+    .mobile-overlay.active {
+      display: block;
+    }
+  }
+  
+  /* La mobile-bar solo existe en móvil */
+  .mobile-bar {
+    display: none;
+  }
