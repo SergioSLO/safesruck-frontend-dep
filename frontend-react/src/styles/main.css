@@ -769,3 +769,192 @@ button:disabled {
     right: 14px;
   }
 }
+
+/* ── Login page ──────────────────────────────────────────────── */
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.72), transparent 28%),
+    linear-gradient(145deg, #eef2ea 0%, #dde6db 100%);
+}
+
+.login-bg-decoration {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(214, 170, 77, 0.18), transparent 36%),
+    radial-gradient(circle at 20% 80%, rgba(31, 102, 73, 0.12), transparent 40%);
+}
+
+.login-card {
+  position: relative;
+  width: min(440px, 100%);
+  margin: auto 0;
+  padding: 36px 32px 32px;
+  border-radius: 32px;
+  background: linear-gradient(180deg, var(--surface-strong) 0%, var(--surface) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 32px 80px rgba(17, 31, 25, 0.18);
+  backdrop-filter: blur(18px);
+  animation: cardIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(28px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 6px;
+}
+
+.login-logo {
+  font-size: 2.4rem;
+  line-height: 1;
+  filter: drop-shadow(0 4px 8px rgba(31, 102, 73, 0.2));
+}
+
+.login-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+  margin-bottom: 2px;
+}
+
+.login-title {
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  margin-top: 0;
+}
+
+.login-subtitle {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.login-tabs {
+  margin-bottom: 20px;
+}
+
+.login-submit-btn {
+  width: 100%;
+  margin-top: 4px;
+  padding: 16px;
+  font-size: 0.97rem;
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 28px 20px 24px;
+    border-radius: 26px;
+  }
+
+  .login-title {
+    font-size: 1.7rem;
+  }
+}
+
+/* ── Truck toggle row ────────────────────────────────────────── */
+
+.truck-toggle-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.truck-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(239, 244, 240, 0.8);
+  border: 1px solid rgba(31, 102, 73, 0.1);
+  transition: background 0.16s ease, border-color 0.16s ease;
+}
+
+.truck-toggle-label:hover {
+  background: rgba(228, 238, 232, 0.9);
+  border-color: rgba(31, 102, 73, 0.2);
+}
+
+.truck-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.truck-toggle-text {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  flex: 1;
+}
+
+.truck-toggle-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+/* ── Truck popup ─────────────────────────────────────────────── */
+
+.truck-popup {
+  width: 100%;
+  margin-top: 10px;
+  padding: 18px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(247, 249, 245, 0.98), rgba(239, 244, 240, 0.92));
+  border: 1px solid rgba(31, 102, 73, 0.12);
+  box-shadow: 0 8px 24px rgba(17, 31, 25, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: popupDown 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popupDown {
+  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.truck-popup-title {
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--primary);
+}
+
+.truck-popup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}

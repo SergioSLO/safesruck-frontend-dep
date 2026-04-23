@@ -9,13 +9,11 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import AuthModal from "@/components/AuthModal";
 
 export default function UserButton() {
-  const { user, logout }          = useAuth();
-  const [modalOpen, setModalOpen] = useState(false);
-  const [dropOpen, setDropOpen]   = useState(false);
-  const dropRef                   = useRef<HTMLDivElement>(null);
+  const { user, logout }        = useAuth();
+  const [dropOpen, setDropOpen] = useState(false);
+  const dropRef                 = useRef<HTMLDivElement>(null);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -37,20 +35,7 @@ export default function UserButton() {
       .join("");
   }
 
-  if (!user) {
-    return (
-      <>
-        <button
-          className="user-btn user-btn--guest"
-          onClick={() => setModalOpen(true)}
-          title="Iniciar sesión"
-        >
-          Iniciar sesión
-        </button>
-        {modalOpen && <AuthModal onClose={() => setModalOpen(false)} />}
-      </>
-    );
-  }
+  if (!user) return null;
 
   return (
     <div className="user-btn-wrapper" ref={dropRef}>

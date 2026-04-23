@@ -14,7 +14,7 @@ import SearchPanel from "@/components/SearchPanel";
 import RouteMap, { type RouteMapHandle } from "@/components/RouteMap";
 import RouteSheet from "@/components/RouteSheet";
 import UserButton from "@/components/UserButton";
-import AuthModal from "@/components/AuthModal";
+import LoginPage from "@/components/LoginPage";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 
 import "@/styles/main.css";
@@ -42,8 +42,6 @@ function AppInner() {
   const [routeResponse, setRouteResponse] = useState<RouteResponse | null>(null);
   const [searchStatus, setSearchStatus]   = useState<SearchStatus>("idle");
   const [sheetVisible, setSheetVisible]   = useState(false);
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-
   const mapRef = useRef<RouteMapHandle>(null);
 
   const isLoading   = searchStatus === "loading";
@@ -52,6 +50,7 @@ function AppInner() {
   // ── Mobile UI injection ──────────────────────────────────────
 
   useEffect(() => {
+    if (!user) return;
     const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
     if (!isMobile()) return;
 
@@ -85,7 +84,7 @@ function AppInner() {
       bar.remove();
       overlay.remove();
     };
-  }, []);
+  }, [user]);
 
   // ── Open sheet on mobile after each search ───────────────────
 
@@ -106,12 +105,6 @@ function AppInner() {
   // ── Search handler ───────────────────────────────────────────
 
   const handleSearch = useCallback(async (payload: RouteRequest) => {
-    // Require login before calculating a route
-    if (!user) {
-      setAuthModalOpen(true);
-      return;
-    }
-
     setSearchStatus("loading");
     setRouteResponse(null);
 
@@ -136,7 +129,7 @@ function AppInner() {
       setSearchStatus("error");
       setSheetVisible(true);
     }
-  }, [user]);
+  }, []);
 
   // ── Focus route start ────────────────────────────────────────
 
@@ -145,6 +138,8 @@ function AppInner() {
   }, []);
 
   // ── Render ───────────────────────────────────────────────────
+
+  if (!user) return <LoginPage />;
 
   return (
     <div className="app-shell">
@@ -162,10 +157,6 @@ function AppInner() {
         routeResponse={routeResponse}
         onFocusStart={handleFocusStart}
       />
-
-      {authModalOpen && (
-        <AuthModal onClose={() => setAuthModalOpen(false)} />
-      )}
     </div>
   );
 }
