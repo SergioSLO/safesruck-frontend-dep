@@ -123,7 +123,7 @@ function AppInner() {
         path:                 [],
         originLabel:          payload.originLabel,
         destinationLabel:     payload.destinationLabel,
-        routeSummary:         "Ocurrió un error al calcular la ruta.",
+        routeSummary:         "Lo siento, ocurrió un error al calcular la ruta.",
         warnings:             [msg],
       });
       setSearchStatus("error");

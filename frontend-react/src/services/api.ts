@@ -17,6 +17,13 @@ const BASE_URL = import.meta.env.VITE_API_URL ?? "";
 
 const TOKEN_KEY = "safetruck_token";
 
+// Called by AuthProvider on mount so the service layer can trigger logout
+// without importing React context.
+let _onUnauthorized: (() => void) | null = null;
+export function registerUnauthorizedHandler(cb: () => void): void {
+  _onUnauthorized = cb;
+}
+
 export function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);
 }
@@ -36,6 +43,9 @@ function authHeaders(): Record<string, string> {
 
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
+    if (res.status === 401) {
+      _onUnauthorized?.();
+    }
     const text = await res.text().catch(() => "");
     throw new Error(`HTTP ${res.status}: ${text || res.statusText}`);
   }

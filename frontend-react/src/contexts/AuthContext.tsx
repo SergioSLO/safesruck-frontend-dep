@@ -10,10 +10,11 @@ import {
   useContext,
   useState,
   useCallback,
+  useEffect,
   type ReactNode,
 } from "react";
 import type { AuthUser } from "@/types/auth";
-import { setToken, removeToken, getToken } from "@/services/api";
+import { setToken, removeToken, getToken, registerUnauthorizedHandler } from "@/services/api";
 
 const USER_KEY = "safetruck_user";
 
@@ -52,6 +53,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setTokenState(null);
     setUser(null);
   }, []);
+
+  // Wire logout into the API layer so a 401 response signs the user out automatically.
+  useEffect(() => {
+    registerUnauthorizedHandler(logout);
+  }, [logout]);
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout }}>

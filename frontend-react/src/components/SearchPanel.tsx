@@ -8,6 +8,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { searchLocations, geocodeLocation, type GeoSuggestion } from "@/services/geocoding";
+import { useAuth } from "@/contexts/AuthContext";
 import type { RouteRequest } from "@/types/route";
 
 interface LocationField {
@@ -37,14 +38,31 @@ interface Props {
 }
 
 export default function SearchPanel({ onSearch, isLoading, statusLabel }: Props) {
+  const { user } = useAuth();
+  const trucks = user?.trucks ?? [];
+
   const [origin,      setOrigin]      = useState<LocationField>(initField("Villa Devoto, Buenos Aires"));
   const [destination, setDestination] = useState<LocationField>(initField("Chacarita, Buenos Aires"));
-  const [weight,    setWeight]    = useState(12000);
-  const [height,    setHeight]    = useState(4.1);
-  const [width,     setWidth]     = useState(2.5);
-  const [length,    setLength]    = useState(12);
+  const [weight,    setWeight]    = useState(trucks[0]?.max_weight_kg ?? 12000);
+  const [height,    setHeight]    = useState(trucks[0]?.max_height_m  ?? 4.1);
+  const [width,     setWidth]     = useState(trucks[0]?.max_width_m   ?? 2.5);
+  const [length,    setLength]    = useState(trucks[0]?.max_length_m  ?? 12);
   const [avoidTolls,     setAvoidTolls]     = useState(true);
   const [preferHighways, setPreferHighways] = useState(true);
+  const [selectedTruckId, setSelectedTruckId] = useState<number | "custom">(
+    trucks[0]?.id ?? "custom"
+  );
+
+  function selectTruck(id: number | "custom") {
+    setSelectedTruckId(id);
+    if (id === "custom") return;
+    const t = trucks.find((t) => t.id === id);
+    if (!t) return;
+    setWeight(t.max_weight_kg);
+    setHeight(t.max_height_m);
+    setWidth(t.max_width_m);
+    setLength(t.max_length_m);
+  }
 
   const originTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const destTimerRef   = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -252,26 +270,57 @@ export default function SearchPanel({ onSearch, isLoading, statusLabel }: Props)
         {/* ── Perfil del camion ── */}
         <details className="truck-details">
           <summary>Perfil del camión y preferencias</summary>
+
+          {/* Truck selector cards */}
+          {trucks.length > 0 && (
+            <div className="truck-selector">
+              {trucks.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  className={`truck-card${selectedTruckId === t.id ? " active" : ""}`}
+                  onClick={() => selectTruck(t.id)}
+                >
+                  <span className="truck-card-name">{t.name}</span>
+                  <span className="truck-card-spec">
+                    {t.max_weight_kg / 1000} t · {t.max_height_m} m alt
+                  </span>
+                  <span className="truck-card-spec">
+                    {t.max_width_m} m ancho · {t.max_length_m} m largo
+                  </span>
+                </button>
+              ))}
+              <button
+                type="button"
+                className={`truck-card truck-card-new${selectedTruckId === "custom" ? " active" : ""}`}
+                onClick={() => selectTruck("custom")}
+              >
+                <span className="truck-card-name">+ Nuevo</span>
+                <span className="truck-card-spec">Ingresar dimensiones manualmente</span>
+              </button>
+            </div>
+          )}
+
           <div className="grid-2">
             <label className="field">
               <span>Peso (kg)</span>
               <input type="number" value={weight} min={1}
-                onChange={(e) => setWeight(Number(e.target.value))} required />
+                onChange={(e) => { setSelectedTruckId("custom"); setWeight(Number(e.target.value)); }} required />
             </label>
             <label className="field">
               <span>Altura (m)</span>
               <input type="number" value={height} min={0.1} step={0.1}
-                onChange={(e) => setHeight(Number(e.target.value))} required />
+                onChange={(e) => { setSelectedTruckId("custom"); setHeight(Number(e.target.value)); }} required />
             </label>
             <label className="field">
               <span>Ancho (m)</span>
               <input type="number" value={width} min={0.1} step={0.1}
-                onChange={(e) => setWidth(Number(e.target.value))} required />
+                onChange={(e) => { setSelectedTruckId("custom"); setWidth(Number(e.target.value)); }} required />
             </label>
             <label className="field">
               <span>Largo (m)</span>
               <input type="number" value={length} min={0.1} step={0.1}
-                onChange={(e) => setLength(Number(e.target.value))} required />
+                onChange={(e) => { setSelectedTruckId("custom"); setLength(Number(e.target.value)); }} required />
             </label>
           </div>
           <div className="options">
